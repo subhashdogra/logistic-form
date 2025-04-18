@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Logistics Entry Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f6fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #2a2a2a;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      input[type="submit"] {
+        margin-top: 25px;
+        background-color: #1e88e5;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #1565c0;
+      }
+
+      #response {
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Logistics Entry Form</h2>
+      <form id="logisticsForm">
+        <label for="date">Date</label>
+        <input type="text" name="date" placeholder="DD-MM-YYYY" required />
+
+        <label for="grno">GR No.</label>
+        <input type="text" name="grno" required />
+
+        <label for="consigner">Consigner</label>
+        <input type="text" name="consigner" required />
+
+        <label for="consignee">Consignee</label>
+        <input type="text" name="consignee" required />
+
+        <label for="invoice">Invoice Number</label>
+        <input type="text" name="invoice" />
+
+        <label for="reference">Reference Number</label>
+        <input type="text" name="reference" />
+
+        <label for="foc">FOC Number</label>
+        <input type="text" name="foc" />
+
+        <label for="defective">Defective Number</label>
+        <input type="text" name="defective" />
+
+        <label for="modal">Modal Descriptive</label>
+        <input type="text" name="modal" />
+
+        <label for="lorry">Lorry Number</label>
+        <input type="text" name="lorry" />
+
+        <label for="piece">Piece</label>
+        <input type="text" name="piece" />
+
+        <input type="submit" value="Submit Entry" />
+      </form>
+
+      <p id="response"></p>
+    </div>
+
+    <script>
+      const form = document.getElementById("logisticsForm");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbzAUtOUj2zd6jvhvG3dSv1qeN5-Ln0YPfTpVXNwIsX5rcNqWBZSurK2CCjgPwhNm9eYOA/exec",
+          {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.text())
+          .then((responseText) => {
+            document.getElementById("response").innerText = responseText;
+            form.reset();
+          })
+          .catch((error) => {
+            document.getElementById("response").innerText =
+              "Error submitting data.";
+            console.error(error);
+          });
+      });
+    </script>
+  </body>
+</html>
